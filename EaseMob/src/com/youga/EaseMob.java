@@ -251,6 +251,16 @@ public class EaseMob {
 
         sendDeviceTokenToServer.addCatch("{ $e.printStackTrace(); return ; }", throwable);
 
+        params = new CtClass[]{
+                classPool.get("com.hyphenate.chat.EMPushHelper$EMPushType"),
+        };
+        CtMethod setPushType = eMPushHelper.getDeclaredMethod("setPushType", params);
+
+        setPushType.setBody("        if ($1 == com.hyphenate.chat.EMPushHelper$EMPushType.HUAWEIPUSH) {\n" +
+                "            this.pushType = com.hyphenate.chat.EMPushHelper$EMPushType.NORMAL;\n" +
+                "        } else {\n" +
+                "            this.pushType = $1;\n" +
+                "        }");
         return eMPushHelper;
     }
 
