@@ -1,4 +1,4 @@
-package android.net.wifi;
+package android.wifi;
 
 public class WifiInfo {
     public String getSSID() {

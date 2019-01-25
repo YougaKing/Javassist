@@ -32,6 +32,7 @@ public class Youga {
             CtClass netUtils = EaseMob.netUtils(classPool);
             CtClass eMPushHelper = EaseMob.eMPushHelper(classPool);
             CtClass eMSessionManager = EaseMob.eMSessionManager(classPool);
+            CtClass eMMonitorReceiver = EaseMob.eMMonitorReceiver(classPool);
 
             eMClient.writeFile("EaseMob/output");
             runnable.writeFile("EaseMob/output");
@@ -47,6 +48,7 @@ public class Youga {
             netUtils.writeFile("EaseMob/output");
             eMPushHelper.writeFile("EaseMob/output");
             eMSessionManager.writeFile("EaseMob/output");
+            eMMonitorReceiver.writeFile("EaseMob/output");
 
             File jarFile = new File("EaseMob/libs/hyphenatechat_3.3.7_new.jar");
             File sourceDir = new File("EaseMob/output");

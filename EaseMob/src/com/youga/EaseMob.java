@@ -1,6 +1,8 @@
 package com.youga;
 
 
+import android.content.Context;
+import android.content.Intent;
 import javassist.*;
 import javassist.bytecode.ExceptionTable;
 
@@ -286,4 +288,53 @@ public class EaseMob {
                 "        }");
         return eMSessionManager;
     }
+
+    public static CtClass eMMonitorReceiver(ClassPool classPool) throws NotFoundException, CannotCompileException {
+        CtClass eMMonitorReceiver = classPool.get("com.hyphenate.chat.EMMonitorReceiver");
+        CtClass[] params = new CtClass[]{
+                classPool.get(Context.class.getName()),
+                classPool.get(Intent.class.getName()),
+        };
+        CtMethod onReceive = eMMonitorReceiver.getDeclaredMethod("onReceive", params);
+        onReceive.setBody("        {\n" +
+                "            String action = $2.getAction();\n" +
+                "            if (\"android.intent.action.PACKAGE_REMOVED\".equals(action)) {\n" +
+                "                if ($2.getBooleanExtra(\"android.intent.extra.REPLACING\", false)) {\n" +
+                "                    return;\n" +
+                "                }\n" +
+                "\n" +
+                "                com.hyphenate.util.EMLog.d(\"EMMonitorReceiver\", $2.getData().getSchemeSpecificPart() + \" be removed\");\n" +
+                "                com.hyphenate.chat.EMMonitor.getInstance().getMonitorDB().b($2.getData().getSchemeSpecificPart());\n" +
+                "            } else {\n" +
+                "                try {\n" +
+                "                    $1.startService(new android.content.Intent($1, com.hyphenate.chat.EMChatService.class));\n" +
+                "                } catch (Throwable t) {\n" +
+                "                    t.printStackTrace();\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }");
+        return eMMonitorReceiver;
+    }
+
+
+//    public void onReceive(Context $1, Intent $2) {
+//        {
+//            String action = $2.getAction();
+//            if ("android.intent.action.PACKAGE_REMOVED".equals(action)) {
+//                if ($2.getBooleanExtra("android.intent.extra.REPLACING", false)) {
+//                    return;
+//                }
+//
+//                com.hyphenate.util.EMLog.d("EMMonitorReceiver", $2.getData().getSchemeSpecificPart() + " be removed");
+//                com.hyphenate.chat.EMMonitor.getInstance().getMonitorDB().b($2.getData().getSchemeSpecificPart());
+//            } else {
+//                try {
+//                    $1.startService(new Intent($1, com.hyphenate.chat.EMChatService.class));
+//                } catch (Throwable t) {
+//                    t.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+
 }
